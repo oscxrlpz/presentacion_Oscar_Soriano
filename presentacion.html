@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación Académica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .slide-content {
+            animation: slideUp 1s ease-out 0.3s both;
+            max-width: 90%;
+            max-height: 90%;
+            width: 100%;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.8s ease;
+            z-index: 1000;
+        }
+        
+        .slide-number {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .navigation-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .auto-advance {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .auto-advance:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+        
+        .element-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: elementFadeIn 0.6s ease-out forwards;
+        }
+        
+        .element-animate:nth-child(1) { animation-delay: 0.2s; }
+        .element-animate:nth-child(2) { animation-delay: 0.4s; }
+        .element-animate:nth-child(3) { animation-delay: 0.6s; }
+        .element-animate:nth-child(4) { animation-delay: 0.8s; }
+        .element-animate:nth-child(5) { animation-delay: 1.0s; }
+        .element-animate:nth-child(6) { animation-delay: 1.2s; }
+        
+        @keyframes elementFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide-bg-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .slide-bg-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .slide-bg-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .slide-bg-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .slide-bg-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .slide-bg-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .slide-bg-7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .slide-bg-8 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de progreso -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Número de diapositiva -->
+    <div class="slide-number" id="slideNumber">1 / 8</div>
+    
+    <!-- Indicador de navegación -->
+    <div class="navigation-hint">
+        Presiona → o ← para navegar | Espacio para auto-avance
+    </div>
+    
+    <!-- Control de auto-avance -->
+    <div class="auto-advance" onclick="toggleAutoAdvance()" id="autoButton">
+        ▶️ Auto (5s)
+    </div>
+
+    <!-- Slide 1: Portada -->
+    <div class="slide active slide-bg-1" id="slide1">
+        <div class="slide-content text-center text-white px-8">
+            <div class="element-animate">
+                <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+                    Título del Proyecto
+                </h1>
+            </div>
+            <div class="element-animate">
+                <div class="w-32 h-1 bg-white mx-auto mb-8"></div>
+            </div>
+            <div class="element-animate">
+                <p class="text-2xl md:text-3xl font-light mb-12 opacity-90">
+                    Subtítulo o descripción breve del documento
+                </p>
+            </div>
+            <div class="element-animate">
+                <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl p-10 max-w-2xl mx-auto">
+                    <h3 class="text-xl font-medium mb-6">Presentado por: Oscar Remberto Soriano Lopez</h3>
+                    <p class="text-xl mb-3">Nombre del Autor</p>
+                    <p class="text-lg opacity-80 mb-4">Institución Académica</p>
+                    <p class="text-lg opacity-80">Diciembre 2024</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Índice -->
+    <div class="slide slide-bg-2" id="slide2">
+        <div class="slide-content px-16 py-12 text-white">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-16 text-center">Índice</h1>
+            </div>
+            <div class="grid gap-6 max-w-4xl mx-auto text-lg">
+                <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 card-hover">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-2xl">1. Introducción</span>
+                        <span class="text-xl opacity-80">03</span>
+                    </div>
+                </div>
+                <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 card-hover">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-2xl">2. Método de Trabajo del Equipo</span>
+                        <span class="text-xl opacity-80">05</span>
+                    </div>
+                </div>
+                <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 card-hover">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-2xl">3. Información Recolectada</span>
+                        <span class="text-xl opacity-80">08</span>
+                    </div>
+                </div>
+                <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 card-hover">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-2xl">4. Análisis</span>
+                        <span class="text-xl opacity-80">12</span>
+                    </div>
+                </div>
+                <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6 card-hover">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-2xl">5. Conclusiones</span>
+                        <span class="text-xl opacity-80">18</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Introducción -->
+    <div class="slide slide-bg-3" id="slide3">
+        <div class="slide-content px-16 py-12 text-white">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-12 text-center">Introducción</h1>
+            </div>
+            <div class="max-w-5xl mx-auto">
+                <div class="element-animate">
+                    <p class="text-2xl leading-relaxed mb-8 text-center opacity-90">
+                        Esta sección presenta el contexto general del proyecto, estableciendo los antecedentes necesarios para comprender el trabajo desarrollado.
+                    </p>
+                </div>
+                <div class="element-animate">
+                    <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl p-10 mb-8">
+                        <h3 class="text-2xl font-semibold mb-4">🎯 Objetivo Principal</h3>
+                        <p class="text-xl leading-relaxed">
+                            Describe aquí el objetivo principal de tu investigación o proyecto de manera clara y concisa.
+                        </p>
+                    </div>
+                </div>
+                <div class="element-animate">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-2xl p-8">
+                            <h4 class="text-xl font-semibold mb-3">📋 Problemática</h4>
+                            <p class="text-lg opacity-90">Contexto del problema a resolver</p>
+                        </div>
+                        <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-2xl p-8">
+                            <h4 class="text-xl font-semibold mb-3">💡 Justificación</h4>
+                            <p class="text-lg opacity-90">Importancia del estudio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Método de Trabajo -->
+    <div class="slide slide-bg-4" id="slide4">
+        <div class="slide-content px-16 py-12 text-white">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-12 text-center">Método de Trabajo</h1>
+            </div>
+            <div class="max-w-6xl mx-auto">
+                <div class="element-animate">
+                    <p class="text-2xl leading-relaxed mb-12 text-center opacity-90">
+                        Metodología empleada por el equipo de trabajo
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <div class="text-4xl mb-4">🔄</div>
+                        <h3 class="text-2xl font-semibold mb-4">Metodología</h3>
+                        <p class="text-lg opacity-90">Describe el enfoque metodológico utilizado en el proyecto.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <div class="text-4xl mb-4">👥</div>
+                        <h3 class="text-2xl font-semibold mb-4">Organización</h3>
+                        <p class="text-lg opacity-90">Explica cómo se organizó el equipo de trabajo.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <div class="text-4xl mb-4">🛠️</div>
+                        <h3 class="text-2xl font-semibold mb-4">Herramientas</h3>
+                        <p class="text-lg opacity-90">Lista las herramientas y tecnologías empleadas.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <div class="text-4xl mb-4">📅</div>
+                        <h3 class="text-2xl font-semibold mb-4">Cronograma</h3>
+                        <p class="text-lg opacity-90">Presenta la planificación temporal del proyecto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Información Recolectada -->
+    <div class="slide slide-bg-5" id="slide5">
+        <div class="slide-content px-16 py-12 text-white">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-12 text-center">Información Recolectada</h1>
+            </div>
+            <div class="max-w-5xl mx-auto">
+                <div class="element-animate">
+                    <p class="text-2xl leading-relaxed mb-12 text-center opacity-90">
+                        Datos y evidencias recopiladas durante el desarrollo del proyecto
+                    </p>
+                </div>
+                <div class="element-animate">
+                    <div class="bg-white bg-opacity-25 backdrop-blur-sm rounded-3xl p-10 mb-8">
+                        <h3 class="text-2xl font-semibold mb-4">📊 Datos Principales</h3>
+                        <p class="text-xl leading-relaxed opacity-90">
+                            Incluye aquí los datos más relevantes recolectados durante la investigación.
+                        </p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-8">
+                        <h4 class="text-xl font-semibold mb-4 border-l-4 border-white pl-4">Fuentes Primarias</h4>
+                        <p class="text-lg opacity-90">Describe las fuentes de información primaria utilizadas.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-8">
+                        <h4 class="text-xl font-semibold mb-4 border-l-4 border-white pl-4">Fuentes Secundarias</h4>
+                        <p class="text-lg opacity-90">Detalla las fuentes de información secundaria consultadas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Análisis -->
+    <div class="slide slide-bg-6" id="slide6">
+        <div class="slide-content px-16 py-12 text-gray-800">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-12 text-center">Análisis</h1>
+            </div>
+            <div class="max-w-6xl mx-auto">
+                <div class="element-animate">
+                    <p class="text-2xl leading-relaxed mb-12 text-center opacity-80">
+                        Análisis detallado de la información recolectada
+                    </p>
+                </div>
+                <div class="grid gap-8">
+                    <div class="element-animate bg-white bg-opacity-60 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <h3 class="text-2xl font-semibold mb-4">🔍 Análisis Cualitativo</h3>
+                        <p class="text-lg opacity-80">Presenta aquí el análisis cualitativo de los datos recolectados.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-60 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <h3 class="text-2xl font-semibold mb-4">📈 Análisis Cuantitativo</h3>
+                        <p class="text-lg opacity-80">Incluye el análisis estadístico y numérico de la información.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-60 backdrop-blur-sm rounded-3xl p-8 card-hover">
+                        <h3 class="text-2xl font-semibold mb-4">💡 Hallazgos Principales</h3>
+                        <p class="text-lg opacity-80">Destaca los descubrimientos más importantes del análisis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Conclusiones -->
+    <div class="slide slide-bg-7" id="slide7">
+        <div class="slide-content px-16 py-12 text-gray-800">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-12 text-center">Conclusiones</h1>
+            </div>
+            <div class="max-w-5xl mx-auto">
+                <div class="element-animate">
+                    <p class="text-2xl leading-relaxed mb-12 text-center opacity-80">
+                        Conclusiones derivadas del análisis y recomendaciones
+                    </p>
+                </div>
+                <div class="space-y-8">
+                    <div class="element-animate bg-white bg-opacity-70 backdrop-blur-sm rounded-3xl p-8">
+                        <h3 class="text-2xl font-semibold mb-4 border-l-4 border-red-500 pl-4">Conclusión Principal</h3>
+                        <p class="text-lg opacity-80">Presenta aquí la conclusión más importante del estudio.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-70 backdrop-blur-sm rounded-3xl p-8">
+                        <h3 class="text-2xl font-semibold mb-4 border-l-4 border-orange-500 pl-4">Conclusiones Secundarias</h3>
+                        <p class="text-lg opacity-80">Incluye otras conclusiones relevantes derivadas del análisis.</p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-70 backdrop-blur-sm rounded-3xl p-8">
+                        <h3 class="text-2xl font-semibold mb-4 border-l-4 border-green-500 pl-4">Recomendaciones</h3>
+                        <p class="text-lg opacity-80">Proporciona recomendaciones para investigaciones futuras.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Referencias -->
+    <div class="slide slide-bg-8" id="slide8">
+        <div class="slide-content px-16 py-12 text-white">
+            <div class="element-animate">
+                <h1 class="text-6xl font-bold mb-12 text-center">Referencias Bibliográficas</h1>
+            </div>
+            <div class="max-w-5xl mx-auto">
+                <div class="element-animate">
+                    <p class="text-2xl leading-relaxed mb-12 text-center opacity-90">
+                        Fuentes consultadas y citadas en el documento
+                    </p>
+                </div>
+                <div class="space-y-6">
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6">
+                        <p class="text-lg">
+                            <strong>Apellido, N.</strong> (Año). <em>Título del libro o artículo</em>. Editorial o Revista.
+                        </p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6">
+                        <p class="text-lg">
+                            <strong>Autor, A.</strong> (Año). Título del artículo. <em>Nombre de la Revista</em>, volumen(número), páginas.
+                        </p>
+                    </div>
+                    <div class="element-animate bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6">
+                        <p class="text-lg">
+                            <strong>Organización.</strong> (Año). <em>Título del documento</em>. Recuperado de URL
+                        </p>
+                    </div>
+                </div>
+                <div class="element-animate bg-white bg-opacity-25 backdrop-blur-sm rounded-3xl p-8 mt-12">
+                    <p class="text-lg text-center">
+                        <strong>Nota:</strong> Las referencias siguen el formato APA según los estándares académicos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+        let autoAdvance = false;
+        let autoInterval;
+
+        function updateProgress() {
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('slideNumber').textContent = `${currentSlide} / ${totalSlides}`;
+        }
+
+        function showSlide(slideNumber) {
+            // Ocultar todas las diapositivas
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active', 'prev');
+            });
+
+            // Mostrar la diapositiva actual
+            const targetSlide = document.getElementById(`slide${slideNumber}`);
+            if (targetSlide) {
+                targetSlide.classList.add('active');
+                
+                // Reiniciar animaciones de elementos
+                const elements = targetSlide.querySelectorAll('.element-animate');
+                elements.forEach((el, index) => {
+                    el.style.animation = 'none';
+                    setTimeout(() => {
+                        el.style.animation = `elementFadeIn 0.6s ease-out ${0.2 + (index * 0.2)}s forwards`;
+                    }, 100);
+                });
+            }
+
+            currentSlide = slideNumber;
+            updateProgress();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function toggleAutoAdvance() {
+            autoAdvance = !autoAdvance;
+            const button = document.getElementById('autoButton');
+            
+            if (autoAdvance) {
+                button.textContent = '⏸️ Pausar';
+                autoInterval = setInterval(() => {
+                    if (currentSlide < totalSlides) {
+                        nextSlide();
+                    } else {
+                        showSlide(1); // Volver al inicio
+                    }
+                }, 5000);
+            } else {
+                button.textContent = '▶️ Auto (5s)';
+                clearInterval(autoInterval);
+            }
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowRight':
+                case ' ':
+                    event.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    showSlide(1);
+                    break;
+                case 'End':
+                    event.preventDefault();
+                    showSlide(totalSlides);
+                    break;
+                case 'Escape':
+                    event.preventDefault();
+                    if (autoAdvance) toggleAutoAdvance();
+                    break;
+            }
+        });
+
+        // Navegación con clic
+        document.addEventListener('click', function(event) {
+            const clickX = event.clientX;
+            const screenWidth = window.innerWidth;
+            
+            if (clickX > screenWidth / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+
+        // Inicializar
+        updateProgress();
+        
+        // Mostrar primera diapositiva con animación
+        setTimeout(() => {
+            const elements = document.querySelectorAll('#slide1 .element-animate');
+            elements.forEach((el, index) => {
+                el.style.animation = `elementFadeIn 0.6s ease-out ${0.2 + (index * 0.2)}s forwards`;
+            });
+        }, 100);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97665577948b7487',t:'MTc1NjQxMDU4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
